@@ -1,0 +1,26 @@
+{
+  "name": "ui5-ultima",
+  "version": "1.0.0",
+  "description": "SAPUI5 TypeScript Generator",
+  "keywords": [
+    "sapui5",
+    "generator",
+    "typescript"
+  ],
+  "author": "hasanciftcii26@gmail.com",
+  "license": "UNLICENSED",
+  "bin": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "tsc"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.0.1",
+    "commander": "^14.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
