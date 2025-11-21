@@ -12,7 +12,7 @@
   "bin": "dist/cli.js",
   "files": [
     "dist",
-    "src"
+    "template"
   ],
   "scripts": {
     "prepack": "tsc"
