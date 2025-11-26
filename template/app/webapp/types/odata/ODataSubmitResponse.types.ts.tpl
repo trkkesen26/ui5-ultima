@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { $ManagedObjectSettings } from "sap/ui/base/ManagedObject";
 import { PropertyGetter, PropertySetter } from "{{UI5_PATH}}/types/global/CustomClass.types";

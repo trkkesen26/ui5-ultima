@@ -84,7 +84,7 @@ export default class FragmentService extends ManagedObject {
                 dialog.destroy();
                 this.resetContexts();
             }
-        } catch (error) {
+        } catch {
             throw new Error("No sap.m.Dialog instance to be closed was found. Please first use openDialog() method to open an sap.m.Dialog instance.");
         }
     }
@@ -113,7 +113,7 @@ export default class FragmentService extends ManagedObject {
     private resetContexts() {
         if (this.context && this.resetContextOnClose) {
             const model = this.context.getModel() as ODataModel;
-            model.resetChanges([this.context.getPath()], true, true);
+            void model.resetChanges([this.context.getPath()], true, true);
         }
     }
 

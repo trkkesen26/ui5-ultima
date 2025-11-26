@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ManagedObject from "sap/ui/base/ManagedObject";
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
 import { ODataReadParameters, ODataServiceSettings, UserReadByKeyParameters, UserReadParameters } from "{{UI5_PATH}}/types/odata/ODataService.types";

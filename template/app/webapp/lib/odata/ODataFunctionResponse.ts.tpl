@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ManagedObject from "sap/ui/base/ManagedObject";
 import { ClassMetadata } from "{{UI5_PATH}}/types/global/CustomClass.types";
 import { ODataFunctionResponseSettings } from "{{UI5_PATH}}/types/odata/ODataFunctionResponse.types";
