@@ -19,8 +19,8 @@
         "@sap-ux/eslint-plugin-fiori-tools": "^0",
         "@sap/ui5-builder-webide-extension": "^1",
         "ui5-task-zipper": "^3",
-        "@eslint/js": "^3",
-        "@eslint/eslintrc": "^9"
+        "@eslint/js": "^9",
+        "@eslint/eslintrc": "^3"
     },
     "scripts": {
         "start": "ui5 serve --port 8080 -o index.html",

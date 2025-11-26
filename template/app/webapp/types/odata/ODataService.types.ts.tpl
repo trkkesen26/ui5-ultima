@@ -3,15 +3,6 @@ import Filter from "sap/ui/model/Filter";
 import Sorter from "sap/ui/model/Sorter";
 import { PropertyGetter, PropertySetter } from "{{UI5_PATH}}/types/global/CustomClass.types";
 
-declare module "{{UI5_PATH}}/lib/odata/ODataService" {
-    export default interface ODataService {
-        getModelName: PropertyGetter<string | undefined>;
-        setModelName: PropertySetter<string | undefined>;
-        getEnableBusy: PropertyGetter<boolean>;
-        setEnableBusy: PropertySetter<boolean>;
-    }
-}
-
 export type ODataServiceSettings = $ManagedObjectSettings & {
     modelName?: string;
     enableBusy?: boolean;
@@ -37,3 +28,12 @@ export type UserReadParameters = UserReadByKeyParameters & {
 };
 
 export type ODataErrorType = "BUSINESS_LOGIC" | "UNIQUE_CONSTRAINT_VIOLATION" | "NOT_FOUND";
+
+declare module "{{UI5_PATH}}/lib/odata/ODataService" {
+    export default interface ODataService {
+        getModelName: PropertyGetter<string | undefined>;
+        setModelName: PropertySetter<string | undefined>;
+        getEnableBusy: PropertyGetter<boolean>;
+        setEnableBusy: PropertySetter<boolean>;
+    }
+}

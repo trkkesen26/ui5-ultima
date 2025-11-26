@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 import BaseController from "{{UI5_PATH}}/controller/BaseController";
 
 export default {

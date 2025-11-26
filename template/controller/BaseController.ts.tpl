@@ -25,7 +25,7 @@ export default abstract class BaseController extends Controller {
 
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // Utility Methods
-    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────    
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
     public getComponent() {
         return this.getOwnerComponent() as Component;
@@ -45,6 +45,7 @@ export default abstract class BaseController extends Controller {
         return element as T;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public getText(key: string, args?: any[]) {
         const model = this.getComponent().getModel("i18n");
 
@@ -68,6 +69,7 @@ export default abstract class BaseController extends Controller {
         this.getRoute(route).attachPatternMatched(handler, this);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public navTo(route: string, parameters?: Record<string, any>, replace?: boolean) {
         this.getRouter().navTo(route, parameters, replace);
     }
@@ -81,7 +83,7 @@ export default abstract class BaseController extends Controller {
     }
 
     public showError(message?: string) {
-        MessageBox.error(message || this.getText("global.error.unexpected"), {
+        MessageBox.error(message ?? this.getText("global.error.unexpected"), {
             contentWidth: "20%",
             styleClass: "customMessageBox"
         });
@@ -101,7 +103,7 @@ export default abstract class BaseController extends Controller {
         });
     }
 
-    public showConfirm(message: string, callback: Function) {
+    public showConfirm(message: string, callback: () => void) {
         MessageBox.confirm(message, {
             contentWidth: "20%",
             actions: ["OK", "CANCEL"],

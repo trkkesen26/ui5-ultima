@@ -1,4 +1,3 @@
-import { Route$PatternMatchedEvent } from "sap/ui/core/routing/Route";
 import BaseController from "{{UI5_PATH}}/controller/BaseController";
 
 /**
@@ -22,7 +21,7 @@ export default class {{VIEW}} extends BaseController {
          * Controller class.
          */
         super.onInit();
-        this.attachPatternMatched("Route{{VIEW}}", this.onRoutePatternMatched);
+        this.attachPatternMatched("Route{{VIEW}}", this.onRoutePatternMatched.bind(this));
     }
 
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -33,7 +32,7 @@ export default class {{VIEW}} extends BaseController {
     // Internal Methods
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private onRoutePatternMatched(event: Route$PatternMatchedEvent) {
+    private onRoutePatternMatched() {
 
     }
 }

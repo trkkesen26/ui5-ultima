@@ -98,5 +98,12 @@ export default [
                 ignoreIIFE: false
             }]
         }
-    }
+    },
+    {
+        files: ["**/*.types.ts"],
+        rules: {
+            semi: "off",
+            "no-extra-semi": "off",
+        }
+    }    
 ];

@@ -1,6 +1,12 @@
 import { $ManagedObjectSettings } from "sap/ui/base/ManagedObject";
 import { PropertyGetter, PropertySetter } from "{{UI5_PATH}}/types/global/CustomClass.types";
 
+export type BaseSettings = $ManagedObjectSettings & {
+    oDataModelName?: string;
+    fragmentBasePath?: string;
+    enableBusy?: boolean;
+};
+
 declare module "{{UI5_PATH}}/lib/core/Base" {
     export default interface Base {
         getODataModelName: PropertyGetter<string | undefined>;
@@ -11,9 +17,3 @@ declare module "{{UI5_PATH}}/lib/core/Base" {
         setEnableBusy: PropertySetter<boolean | undefined>;
     }
 }
-
-export type BaseSettings = $ManagedObjectSettings & {
-    oDataModelName?: string;
-    fragmentBasePath?: string;
-    enableBusy?: boolean;
-};

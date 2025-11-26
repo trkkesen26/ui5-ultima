@@ -5,49 +5,6 @@ export type PropertySetter<T> = (newValue: T) => void;
 export type AggregationGetter<T extends ManagedObject | ManagedObject[] | undefined> = () => T;
 export type AggregationSetter<T extends ManagedObject> = (aggregation: T) => void;
 
-export type ClassMetadata = {
-    properties?: Property;
-    defaultProperty?: string;
-    aggregations?: Aggregation;
-    defaultAggregation?: string;
-    associations?: Association;
-    events?: Event;
-    abstract?: boolean;
-    final?: boolean;
-    deprecated?: boolean;
-};
-
-export type ComponentMetadata = ClassMetadata & {
-    manifest: "json";
-    interfaces?: string[];
-};
-
-type Property = {
-    [key: string]: {
-        type: DataType;
-        defaultValue?: any;
-        visibility?: Visibility;
-        deprecated?: boolean;
-    };
-};
-
-type Aggregation = {
-    [key: string]: {
-        type: string;
-        bindable?: boolean | "bindable";
-        visibility?: Visibility;
-        deprecated?: boolean;
-    } & Cardinality;
-};
-
-type Association = {
-    [key: string]: {
-        type: string;
-        visibility?: Visibility;
-        deprecated?: boolean;
-    } & Cardinality;
-};
-
 type Cardinality = {
     multiple: false;
 } | {
@@ -72,3 +29,47 @@ type DataType =
     "any[]";
 
 type Visibility = "hidden" | "public";
+
+type Property = {
+    [key: string]: {
+        type: DataType;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        defaultValue?: any;
+        visibility?: Visibility;
+        deprecated?: boolean;
+    };
+};
+
+type Aggregation = {
+    [key: string]: {
+        type: string;
+        bindable?: boolean | "bindable";
+        visibility?: Visibility;
+        deprecated?: boolean;
+    } & Cardinality;
+};
+
+type Association = {
+    [key: string]: {
+        type: string;
+        visibility?: Visibility;
+        deprecated?: boolean;
+    } & Cardinality;
+};
+
+export type ClassMetadata = {
+    properties?: Property;
+    defaultProperty?: string;
+    aggregations?: Aggregation;
+    defaultAggregation?: string;
+    associations?: Association;
+    events?: Event;
+    abstract?: boolean;
+    final?: boolean;
+    deprecated?: boolean;
+};
+
+export type ComponentMetadata = ClassMetadata & {
+    manifest: "json";
+    interfaces?: string[];
+};

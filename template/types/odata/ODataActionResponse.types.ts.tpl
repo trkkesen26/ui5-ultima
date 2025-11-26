@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ODataRequestError } from "{{UI5_PATH}}/types/odata/ODataSubmitResponse.types";
 
 export type ODataActionResponseSettings = {
