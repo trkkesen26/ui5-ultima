@@ -22,6 +22,7 @@ export default class Generator {
     private ui5Path: string;
     private archive: string;
     private cancel = false;
+    private npmTargets: { target: string; name: string }[] = [];
 
     public async generate() {
         await this.prompt();
@@ -29,6 +30,7 @@ export default class Generator {
         if (!this.cancel) {
             await this.generateApp();
             await this.generateApprouter();
+            await this.installNpmPackages();
         }
     }
 
@@ -36,11 +38,15 @@ export default class Generator {
         const target = path.join(process.cwd(), this.uiModule);
         const source = path.join(__dirname, "..", "..", "template", "app");
 
+        this.npmTargets.push({
+            target: target,
+            name: "UI application"
+        });
+
         consola.start("Generating a free-style SAPUI5 application...");
 
         await this.createRootDirectory(target);
         await this.createFiles(source, target);
-        await this.installNpmPackages(target);
 
         consola.success("UI5 Ultima has successfully generated your application!");
     }
@@ -52,12 +58,16 @@ export default class Generator {
 
         const target = path.join(process.cwd(), "router");
         const source = path.join(__dirname, "..", "..", "template", "router");
+        
+        this.npmTargets.push({
+            target: target,
+            name: "Approuter"
+        });
 
-        consola.start("Generating a standalone approuter files...");
+        consola.start("Generating standalone approuter files...");
 
         await this.createRootDirectory(target);
         await this.createFiles(source, target);
-        await this.installNpmPackages(target);
 
         consola.success("UI5 Ultima has successfully generated your standalone approuter!");
     }
@@ -298,15 +308,17 @@ export default class Generator {
         }
     }
 
-    private async installNpmPackages(target: string): Promise<void> {
+    private async installNpmPackages(): Promise<void> {
         const install = await confirm({
             message: "Would you like to install npm packages? (default: Y):",
             default: true
         });
 
-        if (install) {
-            consola.info("Installing npm packages...");
-            await this.runNpmInstall(target);
+        for (const npm of this.npmTargets) {
+            if (install) {
+                consola.info(`Installing ${npm.name} npm packages...`);
+                await this.runNpmInstall(npm.target);
+            }
         }
     }
 
@@ -339,13 +351,14 @@ export default class Generator {
             .replaceAll("{{UI5_PATH}}", this.ui5Path)
             .replaceAll("{{ARCHIVE}}", this.archive)
             .replaceAll("{{WELCOME_FILE}}", this.archive)
-            .replaceAll("{{DEFAULT_ROUTE}}", this.getDefaultRoute());
+            .replaceAll("{{DEFAULT_ROUTE}}", this.getDefaultRoute(false))
+            .replaceAll("{{DEFAULT_UI_ROUTE}}", this.getDefaultRoute(true));
 
         return this.replaceBlocks(content, fileName);
     }
 
     private replaceBlocks(rawContent: string, fileName: string) {
-        if (["BaseController.ts", "Base.ts", "Base.types.ts"].includes(fileName)) {
+        if (["BaseController.ts", "Base.ts", "Base.types.ts", "xs-app.json"].includes(fileName)) {
             return this.replaceBaseBlocks(rawContent);
         } else {
             return rawContent;
@@ -356,15 +369,18 @@ export default class Generator {
         if (!this.odata && !this.fragment) {
             return rawContent
                 .replace(/^\s*\/\/ ODATA_BLOCK_START[\s\S]*?^\s*\/\/ ODATA_BLOCK_END[ \t]*\r?\n?/gm, "")
+                .replace(/\/\/ ROUTE_BLOCK_START\s*\n\s*?\n?\/\/ ROUTE_BLOCK_END\s*\n?/g, "")
                 .replace(/^\s*\/\/ FRAGMENT_BLOCK_START[\s\S]*?^\s*\/\/ FRAGMENT_BLOCK_END[ \t]*\r?\n?/gm, "");
         } else if (!this.odata) {
             return rawContent
                 .replace(/^\s*\/\/ ODATA_BLOCK_START[\s\S]*?^\s*\/\/ ODATA_BLOCK_END[ \t]*\r?\n?/gm, "")
+                .replace(/\/\/ ROUTE_BLOCK_START\s*\n\s*?\n?\/\/ ROUTE_BLOCK_END\s*\n?/g, "")
                 .replace(/^[ \t]*\/\/ FRAGMENT_BLOCK_START[ \t]*\r?\n?/gm, "")
                 .replace(/^[ \t]*\/\/ FRAGMENT_BLOCK_END[ \t]*\r?\n?/gm, "");
         } else if (!this.fragment) {
             return rawContent
                 .replace(/^\s*\/\/ FRAGMENT_BLOCK_START[\s\S]*?^\s*\/\/ FRAGMENT_BLOCK_END[ \t]*\r?\n?/gm, "")
+                .replace(/^\s*\/\/ ROUTE_BLOCK_START.*\r?\n|^\s*\/\/ ROUTE_BLOCK_END.*\r?\n?/gm, "")
                 .replace(/^[ \t]*\/\/ ODATA_BLOCK_START[ \t]*\r?\n?/gm, "")
                 .replace(/^[ \t]*\/\/ ODATA_BLOCK_END[ \t]*\r?\n?/gm, "");
         } else {
@@ -372,11 +388,12 @@ export default class Generator {
                 .replace(/^[ \t]*\/\/ ODATA_BLOCK_START[ \t]*\r?\n?/gm, "")
                 .replace(/^[ \t]*\/\/ ODATA_BLOCK_END[ \t]*\r?\n?/gm, "")
                 .replace(/^[ \t]*\/\/ FRAGMENT_BLOCK_START[ \t]*\r?\n?/gm, "")
-                .replace(/^[ \t]*\/\/ FRAGMENT_BLOCK_END[ \t]*\r?\n?/gm, "");
+                .replace(/^[ \t]*\/\/ FRAGMENT_BLOCK_END[ \t]*\r?\n?/gm, "")
+                .replace(/^\s*\/\/ ROUTE_BLOCK_START.*\r?\n|^\s*\/\/ ROUTE_BLOCK_END.*\r?\n?/gm, "");
         }
     }
 
-    private getDefaultRoute() {
+    private getDefaultRoute(ui: boolean) {
         if (!this.model) {
             return "";
         }
@@ -387,6 +404,6 @@ export default class Generator {
             "source": "^${modelUri}(.*)$",
             "destination": "backend-api",
             "authenticationType": "xsuaa"
-        }`;
+        }${ui ? "," : ""}`;
     }
 }
